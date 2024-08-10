@@ -1,35 +1,29 @@
-// src/auth.ts
-import { Lucia, Session, User } from "lucia";
-import db from "@/lib/db";
 import { PrismaAdapter } from "@lucia-auth/adapter-prisma";
-import { cache } from "react";
+import { Lucia, Session, User } from "lucia";
 import { cookies } from "next/headers";
+import { cache } from "react";
+import prisma from "@/lib/db";
 
-const adapter = new PrismaAdapter(db.session, db.user); // your adapter
+const adapter = new PrismaAdapter(prisma.session, prisma.user);
 
 export const lucia = new Lucia(adapter, {
   sessionCookie: {
-    // this sets cookies with super long expiration
-    // since Next.js doesn't allow Lucia to extend cookie expiration when rendering pages
     expires: false,
     attributes: {
-      // set to `true` when using HTTPS
       secure: process.env.NODE_ENV === "production",
     },
   },
-
   getUserAttributes(databaseUserAttributes) {
     return {
       id: databaseUserAttributes.id,
-      userName: databaseUserAttributes.userName,
+      username: databaseUserAttributes.userName,
       displayName: databaseUserAttributes.displayName,
       avatarUrl: databaseUserAttributes.avatarUrl,
-      googleId: databaseUserAttributes,
+      googleId: databaseUserAttributes.googleId,
     };
   },
 });
 
-// IMPORTANT!
 declare module "lucia" {
   interface Register {
     Lucia: typeof lucia;
