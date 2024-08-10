@@ -7,7 +7,7 @@ import {
   loginSchema,
   LoginInput,
 } from "@/lib/validation";
-import bcrypt from "bcrypt";
+import { hash, verify } from "@node-rs/argon2";
 import { generateIdFromEntropySize } from "lucia";
 import { isRedirectError } from "next/dist/client/components/redirect";
 import { cookies } from "next/headers";
@@ -19,7 +19,12 @@ export async function signUpAction(
   try {
     const { email, password, username } = signUpSchema.parse(credentials);
 
-    const passwordHash = await bcrypt.hash(password, 10);
+    const passwordHash = await hash(password, {
+      memoryCost: 19456,
+      timeCost: 2,
+      outputLen: 32,
+      parallelism: 1,
+    });
 
     const userId = generateIdFromEntropySize(10);
 
@@ -95,10 +100,17 @@ export async function loginAction(
       return { error: "Invalid username or password" };
     }
 
-    const passwordMatch = await bcrypt.compare(password, user.passwordHash);
+    const validPassword = await verify(user.passwordHash, password, {
+      memoryCost: 19456,
+      timeCost: 2,
+      outputLen: 32,
+      parallelism: 1,
+    });
 
-    if (!passwordMatch) {
-      return { error: "Invalid username or password" };
+    if (!validPassword) {
+      return {
+        error: "Incorrect username or password",
+      };
     }
 
     const session = await lucia.createSession(user.id, {});
