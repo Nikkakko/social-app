@@ -23,7 +23,7 @@ const UserButton: React.FC<UserButtonProps> = ({ ...props }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="">
+        <button className={cn("flex-none rounded-full", props.className)}>
           <UserAvatar avatarUrl={user.avatarUrl} size={40} />
         </button>
       </DropdownMenuTrigger>
