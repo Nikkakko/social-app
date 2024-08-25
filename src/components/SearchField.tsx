@@ -18,7 +18,12 @@ const SearchField: React.FC<SearchFieldProps> = ({}) => {
   }
 
   return (
-    <form onSubmit={handleSearch} className="relative">
+    <form
+      onSubmit={handleSearch}
+      className="relative"
+      method="GET"
+      action="/search"
+    >
       <Input name="query" placeholder="Search..." className="w-full pe-10" />
       <SearchIcon
         className="absolute top-1/2 right-2 transform -translate-y-1/2 text-muted-foreground"

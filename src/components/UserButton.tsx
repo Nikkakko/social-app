@@ -7,18 +7,24 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuPortal,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import UserAvatar from "./user-avatar";
 import Link from "next/link";
-import { LogOutIcon, UserIcon } from "lucide-react";
+import { Check, LogOutIcon, Monitor, Moon, Sun, UserIcon } from "lucide-react";
 import { logoutAction } from "@/app/_actions/auth";
+import { useTheme } from "next-themes";
 
 interface UserButtonProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 const UserButton: React.FC<UserButtonProps> = ({ ...props }) => {
   const { user } = useSession();
+  const { setTheme, theme } = useTheme();
 
   return (
     <DropdownMenu>
@@ -36,6 +42,43 @@ const UserButton: React.FC<UserButtonProps> = ({ ...props }) => {
             Profile
           </DropdownMenuItem>
         </Link>
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger>
+            <Monitor className="mr-2 size-4" />
+            Theme
+          </DropdownMenuSubTrigger>
+          <DropdownMenuPortal>
+            <DropdownMenuSubContent>
+              <DropdownMenuItem
+                onClick={() => {
+                  setTheme("light");
+                }}
+              >
+                <Sun className="mr-2 size-4" />
+                Light
+                {theme === "light" && <Check className="ml-auto size-4" />}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  setTheme("dark");
+                }}
+              >
+                <Moon className="mr-2 size-4" />
+                Dark
+                {theme === "dark" && <Check className="ml-auto size-4" />}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  setTheme("system");
+                }}
+              >
+                <Monitor className="mr-2 size-4" />
+                System
+                {theme === "system" && <Check className="ml-auto size-4" />}
+              </DropdownMenuItem>
+            </DropdownMenuSubContent>
+          </DropdownMenuPortal>
+        </DropdownMenuSub>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={() => {
