@@ -19,3 +19,11 @@ export function formatRelativeDate(from: Date) {
     }
   }
 }
+
+export function formatNumber(num: number): string {
+  return Intl.NumberFormat("en-Us", {
+    notation: "compact",
+    compactDisplay: "short",
+    maximumFractionDigits: 1,
+  }).format(num);
+}

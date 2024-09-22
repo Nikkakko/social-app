@@ -1,5 +1,6 @@
 import PostEditorLoader from "@/components/loaders/PostEditorLoader";
 import Post from "@/components/posts/Post";
+import TrendsSidebar from "@/components/TrendsSidebar";
 import prisma from "@/lib/db";
 import { postDataInclude } from "@/lib/types";
 import dynamic from "next/dynamic";
@@ -18,13 +19,14 @@ export default async function Home() {
     include: postDataInclude,
   });
   return (
-    <main className="w-fill min-w-0">
+    <main className="w-full min-w-0 flex gap-5">
       <div className="w-full min-w-0 space-y-5">
         <PostEditor />
         {posts.map(post => (
           <Post key={post.id} post={post} />
         ))}
       </div>
+      <TrendsSidebar />
     </main>
   );
 }

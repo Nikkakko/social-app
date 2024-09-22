@@ -10,7 +10,7 @@ interface PostProps {
 
 const Post: React.FC<PostProps> = ({ post }) => {
   return (
-    <article className="spacey-y-3 rounded-2xl bg-card p-5 shadow-sm">
+    <article className="spacey-y-3 rounded-2xl bg-card p-5 shadow-sm w-full">
       <div className="flex flex-wrap gap-3">
         <Link href={`/users/${post.user.userName}`}>
           <UserAvatar avatarUrl={post.user.avatarUrl} />
@@ -27,10 +27,10 @@ const Post: React.FC<PostProps> = ({ post }) => {
             className="block text-sm text-muted-foreground hover:underline"
           >
             {formatRelativeDate(post.createdAt)}
-            {post.content}
           </Link>
         </div>
       </div>
+      <div className="whitespace-pre-line break-words">{post.content}</div>
     </article>
   );
 };
