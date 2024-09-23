@@ -1,3 +1,4 @@
+import ForYouFeed from "@/components/ForYouFeed";
 import PostEditorLoader from "@/components/loaders/PostEditorLoader";
 import Post from "@/components/posts/Post";
 import TrendsSidebar from "@/components/TrendsSidebar";
@@ -11,20 +12,12 @@ const PostEditor = dynamic(() => import("@/components/posts/post-editor"), {
   ssr: false,
 });
 
-export default async function Home() {
-  const posts = await prisma.post.findMany({
-    orderBy: {
-      createdAt: "desc",
-    },
-    include: postDataInclude,
-  });
+export default function Home() {
   return (
     <main className="w-full min-w-0 flex gap-5">
       <div className="w-full min-w-0 space-y-5">
         <PostEditor />
-        {posts.map(post => (
-          <Post key={post.id} post={post} />
-        ))}
+        <ForYouFeed />
       </div>
       <TrendsSidebar />
     </main>
