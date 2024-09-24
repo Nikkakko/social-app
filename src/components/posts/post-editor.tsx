@@ -9,9 +9,11 @@ import { submitPost } from "@/app/_actions/posts";
 import { useSession } from "@/app/(main)/session-provider";
 import UserAvatar from "../user-avatar";
 import { cn } from "@/lib/utils";
+import { useSubmitPostMutation } from "./mutation";
 
 export default function PostEditor() {
   const { user } = useSession();
+  const mutation = useSubmitPostMutation();
 
   const editor = useEditor({
     extensions: [
@@ -30,9 +32,19 @@ export default function PostEditor() {
       blockSeparator: "\n",
     }) || "";
 
-  async function onSubmit() {
-    await submitPost({ content: input });
-    editor?.commands.clearContent();
+  function onSubmit() {
+    mutation.mutate(
+      {
+        content: input,
+        // mediaIds: attachments.map((a) => a.mediaId).filter(Boolean) as string[],
+      },
+      {
+        onSuccess: () => {
+          editor?.commands.clearContent();
+          // resetMediaUploads();
+        },
+      }
+    );
   }
 
   return (
@@ -54,7 +66,7 @@ export default function PostEditor() {
       <div className="flex justify-end">
         <Button
           onClick={onSubmit}
-          disabled={!input.trim()}
+          disabled={!input.trim() || mutation.isPending}
           className="min-w-20"
         >
           Post

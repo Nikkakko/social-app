@@ -7,6 +7,7 @@ import Post from "./posts/Post";
 import kyInstance from "@/lib/ky";
 import InfiniteScrollContainer from "./InfiniteScrollContainer";
 import PostsLoadingSkeleton from "./posts/PostsLoadingSkeleton";
+import DeletePostDialog from "./delete-post-dialog";
 
 interface ForYouFeedProps {}
 
